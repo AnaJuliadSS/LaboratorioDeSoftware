@@ -35,4 +35,4 @@ Um software pode facilitar o gerenciamento financeiro ao:
 
 ### Proposta final
 
-Desenvolver um software que auxilie o usuário no controle de suas finanças, unificando o controle de gastos em um único lugar, com a possibilidade de identificar gargalos nas despesas e traçar planos de melhoria. 
+Desenvolver um software que auxilie o usuário no controle de suas finanças, unificando o controle de gastos, com a possibilidade de identificar gargalos nas despesas e traçar planos de melhoria. 
