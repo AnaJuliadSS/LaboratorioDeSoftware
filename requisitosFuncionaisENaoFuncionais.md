@@ -36,3 +36,22 @@ O sistema deve exibir de forma visual e gráfica a distribuição de gastos do u
     - O sistema irá gerar gráficos simples para mostrar a distribuição dos gastos por categoria no mês.
     - Relatórios sumarizados para análise de tendências financeiras do usuário (gastos por categoria, mês, etc.).
 
+# Requisitos Não Funcionais
+
+1. RNF01 - Interface Intuitiva <br>
+O sistema deve possuir uma interface intuitiva.
+
+2. RNF02 - Desempenho <br>
+O tempo de resposta para o carregamento da lista de gastos não deve ultrapassar **2 segundos**.
+
+3. RNF03 - Segurança <br>
+Deve haver proteção contra ataques comuns, como **SQL Injection, XSS e CSRF**.
+
+4. RNF04 - Armazenamento de Dados <br>
+Os registros de gastos devem ser armazenados em um banco de dados **seguro e confiável**.
+
+5. RNF05 - Compatibilidade <br>
+O sistema deve ser compatível com os principais navegadores modernos (**Chrome, Firefox, Edge, Safari**).
+
+6. RNF06 - Manutenibilidade <br>
+O código deve ser **modular**, permitindo futuras atualizações e melhorias.
