@@ -55,3 +55,11 @@ O sistema deve ser compatível com os principais navegadores modernos (**Chrome,
 
 6. RNF06 - Manutenibilidade <br>
 O código deve ser **modular**, permitindo futuras atualizações e melhorias.
+
+# Restrições 
+
+1. RT01 - Tecnológica: A base de dados utilizada deve ser relacional 
+
+2. RT02 - Orçamentária: O desenvolvimento do sistema deve se adequar a um orçamento limitado, priorizando funcionalidades essenciais na primeira versão (MVP).
+
+3. RT03 - Prazo: O sistema deve ser implementado e testado em um período de 6 meses. 
