@@ -1,0 +1,85 @@
+# .NET build folders
+bin/
+obj/
+out/
+Generated_Code/
+
+# User-specific files
+*.user
+*.userosscache
+*.suo
+*.userprefs
+
+# Visual Studio cache files
+.vs/
+.vscode/*
+!.vscode/extensions.json
+
+# Rider / JetBrains
+.idea/
+*.sln.iml
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# OS generated files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
+Desktop.ini
+
+# Node.js
+node_modules/
+dist/
+dist-ssr/
+.build/
+*.local
+
+# Local env files
+.env
+.env.*.local
+
+# NPM/Yarn lock files (opcional)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Test results
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
+*.testresults
+*.trx
+.nyc_output/
+
+# EF Core Migrations snapshots
+Migrations/*Snapshot.cs
+
+# Azure Functions local settings
+local.settings.json
+
+# Others
+*.sw?
+*.ntvs*
+*.njsproj
+
+# macOS Finder
+.AppleDouble
+.LSOverride
+
+# Windows Thumbnail cache
+Thumbs.db
+ehthumbs.db
+
+# Python cache (se algum script auxiliar)
+__pycache__/
+*.py[cod]
+*$py.class
