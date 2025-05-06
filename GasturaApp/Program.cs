@@ -1,3 +1,4 @@
+using DotNetEnv;
 using GasturaApp.Application.Repositories.Implementations;
 using GasturaApp.Application.Repositories.Interfaces;
 using GasturaApp.Application.Services.Implementations;
@@ -15,8 +16,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+Env.Load();
+
+var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
+
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(connectionString));
 
 builder.Services.AddScoped<ICategoriaService, CategoriaService>();
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
