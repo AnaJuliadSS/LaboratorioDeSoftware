@@ -4,9 +4,9 @@ namespace GasturaApp.Core.DTOs;
 
 public class CreateCategoriaDTO
 {
-    [Required]
+    [Required(ErrorMessage = "A descrição é obrigatória.")]
     public string Descricao { get; set; } = string.Empty;
 
-    [Required]
+    [Required(ErrorMessage = "O ID do usuário é obrigatório.")]
     public int UsuarioId { get; set; }
 }

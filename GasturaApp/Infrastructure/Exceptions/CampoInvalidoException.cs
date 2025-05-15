@@ -1,10 +1,3 @@
-﻿namespace GasturaApp.Infrastructure.Exceptions
-{
-    public class CampoInvalidoException : Exception
-    {
-        public CampoInvalidoException(string nomeCampo)
-           : base($"O campo '{nomeCampo}' informado é inválido.")
-        {
-        }
-    }
-}
+﻿namespace GasturaApp.Infrastructure.Exceptions;
+
+public class CampoInvalidoException(string nomeCampo) : Exception($"O campo '{nomeCampo}' informado é inválido.") { }

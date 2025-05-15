@@ -1,4 +1,5 @@
 ﻿using GasturaApp.Application.Repositories.Interfaces;
+using GasturaApp.Application.Services.Implementations;
 using GasturaApp.Application.Services.Interfaces;
 using GasturaApp.Core.DTOs;
 using GasturaApp.Infrastructure.Exceptions;
@@ -14,23 +15,22 @@ public class CategoriaController(ICategoriaService categoriaService) : Controlle
     [HttpPost]
     public async Task<IActionResult> AddCategoriaAsync([FromBody] CreateCategoriaDTO createCategoriaDTO)
     {
-        //TODO: fazer middleware que trata as exceções globalmente para não ficar tanto catch
-        try
-        {
-            var novaCategoria = await categoriaService.ValidarEAdicionarCategoria(createCategoriaDTO);
+        var novaCategoria = await categoriaService.ValidarEAdicionarCategoria(createCategoriaDTO);
 
-            return CreatedAtAction(nameof(GetCategoriaById), new { id = novaCategoria.Id }, novaCategoria);
-        }
-        catch (Exception ex) when (ex is CampoObrigatorioException || ex is CampoInvalidoException)
-        {
-            return BadRequest(ex.Message);
-        }   
-        catch (Exception ex)
-        {
-            return StatusCode(500, ex.Message);
-        }
+        return CreatedAtAction(nameof(GetCategoriaById), new { id = novaCategoria.Id }, novaCategoria);
     }
 
     [HttpGet("{id}")]
-    public IActionResult GetCategoriaById(int categoriaId) => Ok(); //ainda não implementado
+    public async Task<IActionResult> GetCategoriaById(int id, [FromQuery] int usuarioId)
+    {
+        var categoria = await categoriaService.GetCategoriaPorIdEUsuarioAsync(id, usuarioId);
+        return Ok(categoria);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAllCategoriasAsync([FromQuery] int usuarioId)
+    {
+        var categorias = await categoriaService.GetAllCategoriasByUsuarioIdAsync(usuarioId);
+        return Ok(categorias);
+    }
 }

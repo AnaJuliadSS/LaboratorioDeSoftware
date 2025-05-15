@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace GasturaApp.Core.Entities;
+namespace GasturaApp.Core.DTOs;
 
-public class Usuario
+public class ListUsuariosDTO
 {
     [Key]
     public int Id { get; set; }
@@ -13,9 +13,6 @@ public class Usuario
     [Required]
     [EmailAddress]
     public string Email { get; set; } = string.Empty;
-
-    [Required]
-    public string Senha { get; set; } = string.Empty;
 
     [Required]
     public DateTime DataCadastro { get; set; } = DateTime.Now;

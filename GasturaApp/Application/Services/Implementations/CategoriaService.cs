@@ -3,10 +3,11 @@ using GasturaApp.Application.Services.Interfaces;
 using GasturaApp.Core.DTOs;
 using GasturaApp.Core.Entities;
 using GasturaApp.Infrastructure.Exceptions;
+using GasturaApp.Infrastructure.Mapper;
 
 namespace GasturaApp.Application.Services.Implementations;
 
-public class CategoriaService(ICategoriaRepository categoriaRepository) : ICategoriaService
+public class CategoriaService(ICategoriaRepository categoriaRepository, IUsuarioRepository usuarioRepository) : ICategoriaService
 {
     public async Task<Categoria> ValidarEAdicionarCategoria(CreateCategoriaDTO createCategoriaDTO)
     {
@@ -18,15 +19,34 @@ public class CategoriaService(ICategoriaRepository categoriaRepository) : ICateg
         if (createCategoriaDTO.UsuarioId <= 0)
             throw new CampoInvalidoException("Usuário ID");
 
-        //TODO: adicionar verificação para caso de categoria já existir para esse usuário
-        //TODO: adicionar verificação para caso de usuário id não existir no banco
+        if (!await usuarioRepository.UsuarioExisteAsync(createCategoriaDTO.UsuarioId))
+            throw new EntidadeNaoEncontradaException("Usuário");
 
-        Categoria categoria = new()
-        {
-            Descricao = createCategoriaDTO.Descricao.Trim(),
-            UsuarioId = createCategoriaDTO.UsuarioId
-        };
+        if (await categoriaRepository.CategoriaExisteParaUsuario(createCategoriaDTO.Descricao, createCategoriaDTO.UsuarioId))
+            throw new CategoriaJaExisteParaUsuarioException(createCategoriaDTO.Descricao, createCategoriaDTO.UsuarioId);
+
+        createCategoriaDTO.Descricao = createCategoriaDTO.Descricao.Trim();
+
+        Categoria categoria = Mapper.Map<Categoria>(createCategoriaDTO);
 
         return await categoriaRepository.AdicionarCategoriaAsync(categoria);
+    }
+
+    public async Task<List<Categoria>> GetAllCategoriasByUsuarioIdAsync(int usuarioId)
+    {
+        if (usuarioId <= 0)
+            throw new CampoInvalidoException("Usuário ID");
+
+        if (!await usuarioRepository.UsuarioExisteAsync(usuarioId))
+            throw new EntidadeNaoEncontradaException($"Usuário");
+
+        return await categoriaRepository.GetAllCategoriasByUsuarioIdAsync(usuarioId);
+    }
+
+    public async Task<Categoria> GetCategoriaPorIdEUsuarioAsync(int categoriaId, int usuarioId)
+    {
+        var categoria = await categoriaRepository.GetCategoriaByIdEUsarioAsync(categoriaId, usuarioId);
+
+        return categoria ?? throw new EntidadeNaoEncontradaException($"Categoria");
     }
 }
