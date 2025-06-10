@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace GasturaApp.Infrastructure.Mapper;
+namespace GasturaApp.Application.Helpers.Mapper;
 
 public class Mapper
 {

@@ -1,9 +1,9 @@
-﻿using GasturaApp.Application.Repositories.Interfaces;
+﻿using GasturaApp.Application.Helpers.Mapper;
+using GasturaApp.Application.Repositories.Interfaces;
 using GasturaApp.Application.Services.Interfaces;
 using GasturaApp.Core.DTOs;
 using GasturaApp.Core.Entities;
 using GasturaApp.Infrastructure.Exceptions;
-using GasturaApp.Infrastructure.Mapper;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -11,13 +11,15 @@ namespace GasturaApp.Application.Services.Implementations;
 
 public class UsuarioService(IUsuarioRepository usuarioRepository) : IUsuarioService
 {
-    public async Task<Usuario> CadastrarUsuarioAsync(CreateUsuarioDTO createUsuarioDTO)
+    public async Task<Usuario> ValidarEAdicionarUsuarioAsync(CreateUsuarioDTO createUsuarioDTO)
     {
+        #region validações
         if (await usuarioRepository.ExisteEmailAsync(createUsuarioDTO.Email))
             throw new EmailJaCadastradoException();
 
         if (ContemSequencia(createUsuarioDTO.Senha))
             throw new SenhaNaoDeveConterSequenciasException();
+        #endregion
 
         createUsuarioDTO.Senha = GerarSenhaHash(createUsuarioDTO.Senha);
 

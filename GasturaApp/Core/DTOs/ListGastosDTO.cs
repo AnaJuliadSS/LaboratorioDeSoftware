@@ -1,9 +1,9 @@
 ﻿using GasturaApp.Core.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace GasturaApp.Core.Entities;
+namespace GasturaApp.Core.DTOs;
 
-public class Gasto
+public class ListGastosDTO
 {
     [Key]
     public int Id { get; set; }
@@ -23,8 +23,4 @@ public class Gasto
 
     [Required]
     public int CategoriaId { get; set; }
-
-    public Usuario Usuario { get; set; }
-    public Categoria Categoria { get; set; }
-
 }

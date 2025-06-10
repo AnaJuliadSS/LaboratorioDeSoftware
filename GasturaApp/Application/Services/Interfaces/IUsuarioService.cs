@@ -5,7 +5,7 @@ namespace GasturaApp.Application.Services.Interfaces;
 
 public interface IUsuarioService
 {
-    Task<Usuario> CadastrarUsuarioAsync(CreateUsuarioDTO createUsuarioDTO);
+    Task<Usuario> ValidarEAdicionarUsuarioAsync(CreateUsuarioDTO createUsuarioDTO);
     Task<List<ListUsuariosDTO>> GetAllUsuariosAsync();
     Task<Usuario> GetUsuarioByIdAsync(int id);
 }

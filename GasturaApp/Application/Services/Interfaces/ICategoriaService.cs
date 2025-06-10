@@ -5,7 +5,7 @@ namespace GasturaApp.Application.Services.Interfaces;
 
 public interface ICategoriaService
 {
-    Task<Categoria> ValidarEAdicionarCategoria(CreateCategoriaDTO categoria);
+    Task<Categoria> ValidarEAdicionarCategoriaAsync(CreateCategoriaDTO categoria);
     Task<List<Categoria>> GetAllCategoriasByUsuarioIdAsync(int usuarioId);
     Task<Categoria> GetCategoriaPorIdEUsuarioAsync(int categoriaId, int usuarioId);
 }

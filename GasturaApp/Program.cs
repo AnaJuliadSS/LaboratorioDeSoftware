@@ -20,6 +20,9 @@ Env.Load();
 
 var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
 
+if (string.IsNullOrEmpty(connectionString))
+    throw new InvalidOperationException("DATABASE_URL não está definido no .env ou nas variáveis de ambiente.");
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
 
@@ -28,6 +31,9 @@ builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+
+builder.Services.AddScoped<IGastoRepository, GastoRepository>();
+builder.Services.AddScoped<IGastoService, GastoService>();
 
 var app = builder.Build();
 

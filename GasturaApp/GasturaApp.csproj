@@ -18,7 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Application\Helpers\" />
     <Folder Include="Core\Interfaces\" />
   </ItemGroup>
 

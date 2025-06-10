@@ -1,16 +1,17 @@
-﻿using GasturaApp.Application.Repositories.Interfaces;
+﻿using GasturaApp.Application.Helpers.Mapper;
+using GasturaApp.Application.Repositories.Interfaces;
 using GasturaApp.Application.Services.Interfaces;
 using GasturaApp.Core.DTOs;
 using GasturaApp.Core.Entities;
 using GasturaApp.Infrastructure.Exceptions;
-using GasturaApp.Infrastructure.Mapper;
 
 namespace GasturaApp.Application.Services.Implementations;
 
 public class CategoriaService(ICategoriaRepository categoriaRepository, IUsuarioRepository usuarioRepository) : ICategoriaService
 {
-    public async Task<Categoria> ValidarEAdicionarCategoria(CreateCategoriaDTO createCategoriaDTO)
+    public async Task<Categoria> ValidarEAdicionarCategoriaAsync(CreateCategoriaDTO createCategoriaDTO)
     {
+        #region validações
         ArgumentNullException.ThrowIfNull(createCategoriaDTO);
 
         if (string.IsNullOrWhiteSpace(createCategoriaDTO.Descricao))
@@ -25,6 +26,8 @@ public class CategoriaService(ICategoriaRepository categoriaRepository, IUsuario
         if (await categoriaRepository.CategoriaExisteParaUsuario(createCategoriaDTO.Descricao, createCategoriaDTO.UsuarioId))
             throw new CategoriaJaExisteParaUsuarioException(createCategoriaDTO.Descricao, createCategoriaDTO.UsuarioId);
 
+        #endregion
+
         createCategoriaDTO.Descricao = createCategoriaDTO.Descricao.Trim();
 
         Categoria categoria = Mapper.Map<Categoria>(createCategoriaDTO);
@@ -34,11 +37,10 @@ public class CategoriaService(ICategoriaRepository categoriaRepository, IUsuario
 
     public async Task<List<Categoria>> GetAllCategoriasByUsuarioIdAsync(int usuarioId)
     {
-        if (usuarioId <= 0)
-            throw new CampoInvalidoException("Usuário ID");
-
+        #region validações
         if (!await usuarioRepository.UsuarioExisteAsync(usuarioId))
             throw new EntidadeNaoEncontradaException($"Usuário");
+        #endregion
 
         return await categoriaRepository.GetAllCategoriasByUsuarioIdAsync(usuarioId);
     }

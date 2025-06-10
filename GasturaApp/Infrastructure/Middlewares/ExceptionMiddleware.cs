@@ -1,5 +1,4 @@
-﻿
-using GasturaApp.Infrastructure.Exceptions;
+﻿using GasturaApp.Infrastructure.Exceptions;
 using System.Net;
 using System.Text.Json;
 

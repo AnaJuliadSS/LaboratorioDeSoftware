@@ -1,9 +1,6 @@
-﻿using GasturaApp.Application.Repositories.Interfaces;
-using GasturaApp.Application.Services.Implementations;
-using GasturaApp.Application.Services.Interfaces;
+﻿using GasturaApp.Application.Services.Interfaces;
 using GasturaApp.Core.DTOs;
-using GasturaApp.Infrastructure.Exceptions;
-using Microsoft.AspNetCore.Http.HttpResults;
+using GasturaApp.Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GasturaApp.WebApi.Controllers;
@@ -13,24 +10,23 @@ namespace GasturaApp.WebApi.Controllers;
 public class CategoriaController(ICategoriaService categoriaService) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> AddCategoriaAsync([FromBody] CreateCategoriaDTO createCategoriaDTO)
+    public async Task<IActionResult> AdicionarCategoriaAsync([FromBody] CreateCategoriaDTO createCategoriaDTO)
     {
-        var novaCategoria = await categoriaService.ValidarEAdicionarCategoria(createCategoriaDTO);
-
-        return CreatedAtAction(nameof(GetCategoriaById), new { id = novaCategoria.Id }, novaCategoria);
+        Categoria? novaCategoria = await categoriaService.ValidarEAdicionarCategoriaAsync(createCategoriaDTO);
+        return CreatedAtAction(nameof(GetCategoriaById), new { id = novaCategoria.Id, usuarioId = novaCategoria.UsuarioId }, novaCategoria);
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetCategoriaById(int id, [FromQuery] int usuarioId)
+    [HttpGet("{categoriaId}/{usuarioId}")]
+    public async Task<IActionResult> GetCategoriaById(int categoriaId, int usuarioId)
     {
-        var categoria = await categoriaService.GetCategoriaPorIdEUsuarioAsync(id, usuarioId);
+        Categoria? categoria = await categoriaService.GetCategoriaPorIdEUsuarioAsync(categoriaId, usuarioId);
         return Ok(categoria);
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAllCategoriasAsync([FromQuery] int usuarioId)
     {
-        var categorias = await categoriaService.GetAllCategoriasByUsuarioIdAsync(usuarioId);
+        List<Categoria> categorias = await categoriaService.GetAllCategoriasByUsuarioIdAsync(usuarioId);
         return Ok(categorias);
     }
 }

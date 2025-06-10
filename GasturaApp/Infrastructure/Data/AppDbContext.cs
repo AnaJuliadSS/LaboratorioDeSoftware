@@ -14,6 +14,12 @@ namespace GasturaApp.Infrastructure.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Gasto>(entity =>
+            {
+                entity.Property(g => g.ModalidadePagamento)
+                      .HasConversion<string>();
+            });
+
             modelBuilder.Entity<Usuario>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
