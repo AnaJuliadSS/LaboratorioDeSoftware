@@ -35,6 +35,9 @@ builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IGastoRepository, GastoRepository>();
 builder.Services.AddScoped<IGastoService, GastoService>();
 
+builder.Services.AddScoped<IOrcamentoRepository, OrcamentoRepository>();
+builder.Services.AddScoped<IOrcamentoService, OrcamentoService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
