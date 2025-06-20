@@ -30,6 +30,10 @@ namespace GasturaApp.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Cor")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Descricao")
                         .IsRequired()
                         .HasColumnType("text");

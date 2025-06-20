@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using GasturaApp.Core.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace GasturaApp.Core.DTOs;
 
@@ -18,4 +19,7 @@ public class ListOrcamentoDTO
 
     [Required]
     public DateTime MesReferencia { get; set; }
+
+    [Required]
+    public Categoria Categoria { get; set; }
 }

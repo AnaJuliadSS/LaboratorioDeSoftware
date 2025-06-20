@@ -12,6 +12,21 @@ public class GastoService(IGastoRepository gastoRepository,
                     ICategoriaRepository categoriaRepository,
                     IUsuarioRepository usuarioRepository) : IGastoService
 {
+    public async Task<Gasto> EditarGastoByIdAsync(int gastoId, EditGastoDTO gasto)
+    {
+        var gastoExistente = await gastoRepository.GetGastoByIdEUsuarioId(gastoId, gasto.UsuarioId);
+        return gastoExistente == null
+            ? throw new EntidadeNaoEncontradaException("Gasto")
+            : await gastoRepository.EditarGastoByIdAsync(gastoExistente, gasto);
+    }
+
+    public async Task<bool> ExcluirGastoByIdAsync(int gastoId, int usuarioId)
+    {
+        var gasto = await gastoRepository.GetGastoByIdEUsuarioId(gastoId, usuarioId);
+
+        return gasto == null ? throw new EntidadeNaoEncontradaException("Gasto") : await gastoRepository.ExcluirGastoAsync(gasto);
+    }
+
     public async Task<List<ListGastosDTO>> GetAllGastosByUsuarioIdAsync(int usuarioId)
     {
         #region Validações
@@ -24,7 +39,7 @@ public class GastoService(IGastoRepository gastoRepository,
         return gastos.Select(u => Mapper.Map<ListGastosDTO>(u)).ToList();
     }
 
-    public async Task<ListGastosDTO?> GetGastoByIdEUsuarioId(int gastoId, int usuarioId)
+    public async Task<ListGastosDTO?> GetGastoByIdEUsuarioIdAsync(int gastoId, int usuarioId)
     {
         if (!await usuarioRepository.UsuarioExisteAsync(usuarioId))
             throw new EntidadeNaoEncontradaException("Usuário");

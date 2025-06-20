@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace GasturaApp.WebApi.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/categorias")]
 public class CategoriaController(ICategoriaService categoriaService) : ControllerBase
 {
     [HttpPost]
@@ -23,8 +23,8 @@ public class CategoriaController(ICategoriaService categoriaService) : Controlle
         return Ok(categoria);
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GetAllCategoriasAsync([FromQuery] int usuarioId)
+    [HttpGet("{usuarioId}")]
+    public async Task<IActionResult> GetAllCategoriasAsync(int usuarioId)
     {
         List<Categoria> categorias = await categoriaService.GetAllCategoriasByUsuarioIdAsync(usuarioId);
         return Ok(categorias);

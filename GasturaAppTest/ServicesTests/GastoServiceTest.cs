@@ -62,7 +62,7 @@ public class GastoServiceTest
         gastoRepositoryMock.Setup(g => g.GastoPertenceAoUsuario(gastoId, usuarioId)).ReturnsAsync(true);
         gastoRepositoryMock.Setup(g => g.GetGastoByIdEUsuarioId(gastoId, usuarioId)).ReturnsAsync(gasto);
 
-        var resultado = await gastoService.GetGastoByIdEUsuarioId(gastoId, usuarioId);
+        var resultado = await gastoService.GetGastoByIdEUsuarioIdAsync(gastoId, usuarioId);
 
         Assert.NotNull(resultado);
         Assert.Equal(gastoId, resultado.Id);
@@ -78,7 +78,7 @@ public class GastoServiceTest
         usuarioRepositoryMock.Setup(u => u.UsuarioExisteAsync(usuarioId)).ReturnsAsync(false);
 
         await Assert.ThrowsAsync<EntidadeNaoEncontradaException>(() =>
-            gastoService.GetGastoByIdEUsuarioId(gastoId, usuarioId));
+            gastoService.GetGastoByIdEUsuarioIdAsync(gastoId, usuarioId));
     }
 
     [Fact]
@@ -91,7 +91,7 @@ public class GastoServiceTest
         gastoRepositoryMock.Setup(g => g.GastoPertenceAoUsuario(gastoId, usuarioId)).ReturnsAsync(false);
 
         await Assert.ThrowsAsync<EntidadeNaoEncontradaException>(() =>
-            gastoService.GetGastoByIdEUsuarioId(gastoId, usuarioId));
+            gastoService.GetGastoByIdEUsuarioIdAsync(gastoId, usuarioId));
     }
 
     [Fact]
@@ -105,7 +105,7 @@ public class GastoServiceTest
         gastoRepositoryMock.Setup(g => g.GetGastoByIdEUsuarioId(gastoId, usuarioId)).ReturnsAsync((Gasto)null!);
 
         await Assert.ThrowsAsync<EntidadeNaoEncontradaException>(() =>
-            gastoService.GetGastoByIdEUsuarioId(gastoId, usuarioId));
+            gastoService.GetGastoByIdEUsuarioIdAsync(gastoId, usuarioId));
     }
 
     [Fact]

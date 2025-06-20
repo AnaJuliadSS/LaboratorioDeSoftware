@@ -1,10 +1,10 @@
-import GasturaApp from '../src/components/Gastura/GasturaApp'
-import './index.css'
+import '../src/index.css'
+import Login from './components/login/Login'
 
 function App() {
 
   return (
-    <GasturaApp/>
+    <Login/>
   )
 }
 

@@ -23,7 +23,7 @@ public class CategoriaService(ICategoriaRepository categoriaRepository, IUsuario
         if (!await usuarioRepository.UsuarioExisteAsync(createCategoriaDTO.UsuarioId))
             throw new EntidadeNaoEncontradaException("Usuário");
 
-        if (await categoriaRepository.CategoriaExisteParaUsuario(createCategoriaDTO.Descricao, createCategoriaDTO.UsuarioId))
+        if (!await categoriaRepository.CategoriaExisteParaUsuario(createCategoriaDTO.Descricao, createCategoriaDTO.UsuarioId))
             throw new CategoriaJaExisteParaUsuarioException(createCategoriaDTO.Descricao, createCategoriaDTO.UsuarioId);
 
         #endregion

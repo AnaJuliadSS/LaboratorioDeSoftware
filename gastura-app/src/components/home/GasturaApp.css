@@ -1,0 +1,385 @@
+/* Variáveis de cores personalizadas */
+:root {
+  --color1: #fcf3e3;
+  --color2: #ed4c87;
+  --color3: #63526e;
+  --color4: #6cbaa4;
+  --color5: #f2ad5e;
+  --pink: #FF8FAB;
+  --pink-light: #FFE0EB;
+  --purple: #5D27DB;
+  --purple-light: #EDE7FF;
+  --orange: #FFB347;
+  --orange-light: #FFE5B4;
+  
+  /* Cores derivadas para o tema */
+  --primary-gradient: linear-gradient(135deg, var(--color2), var(--pink));
+  --secondary-gradient: linear-gradient(135deg, var(--color4), var(--color5));
+  --bg-gradient: linear-gradient(135deg, var(--color1), #ffffff);
+  --card-shadow: 0 8px 32px rgba(99, 82, 110, 0.1);
+  --hover-shadow: 0 12px 48px rgba(99, 82, 110, 0.15);
+  --border-radius: 16px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==== TELA PRINCIPAL ==== */
+.space-y-6 {
+  background: var(--bg-gradient);
+  min-height: 100vh;
+  position: relative;
+}
+
+.space-y-6::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  /* background: linear-gradient(135deg, var(--color2) 0%, var(--pink) 50%, var(--color4) 100%); */
+  opacity: 0.1;
+  z-index: 0;
+}
+
+.container-fluid {
+  position: relative;
+  z-index: 1;
+}
+
+/* Título principal */
+h1.mb-4 {
+  color: var(--color3);
+  font-weight: 700;
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 3rem !important;
+  position: relative;
+  text-shadow: 0 2px 4px rgba(99, 82, 110, 0.1);
+}
+
+h1.mb-4::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: var(--primary-gradient);
+  border-radius: 2px;
+}
+
+/* ==== DASHBOARD/TABELA ==== */
+.card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+  transition: var(--transition);
+  overflow: hidden;
+  margin: 2rem 0;
+}
+
+.card:hover {
+  box-shadow: var(--hover-shadow);
+  transform: translateY(-4px);
+}
+
+.card-body {
+  padding: 2rem;
+}
+
+/* Tabela customizada */
+.table {
+  margin-bottom: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table thead th {
+  background: linear-gradient(20deg, #ffebff, white);
+  /* background-color: ; */
+  /* color: white; */
+  color: var(--color3);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  letter-spacing: 0.5px;
+  padding: 1.25rem 1rem;
+  border: none;
+  position: relative;
+  transition: var(--transition);
+}
+
+.table thead th:first-child {
+  border-top-left-radius: 12px;
+}
+
+.table thead th:last-child {
+  border-top-right-radius: 12px;
+}
+
+.table thead th[style*="cursor: pointer"]:hover {
+  background: linear-gradient(135deg, var(--color2), var(--pink));
+  transform: translateY(-2px);
+}
+
+.table thead th[style*="cursor: pointer"]::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--color5);
+  transform: scaleX(0);
+  transition: var(--transition);
+}
+
+.table thead th[style*="cursor: pointer"]:hover::after {
+  transform: scaleX(1);
+}
+
+/* Linhas da tabela */
+.table tbody tr {
+  background: rgba(255, 255, 255, 0.8);
+  transition: var(--transition);
+  border: none;
+}
+
+.table tbody tr:nth-child(even) {
+  background: rgba(252, 243, 227, 0.3);
+}
+
+.table tbody tr:hover {
+  background: linear-gradient(135deg, var(--pink-light), var(--purple-light));
+  transform: translateX(8px);
+  box-shadow: 8px 0 24px rgba(99, 82, 110, 0.1);
+}
+
+.table tbody td {
+  padding: 1.25rem 1rem;
+  vertical-align: middle;
+  border: none;
+  border-bottom: 1px solid rgba(99, 82, 110, 0.1);
+  font-weight: 500;
+  color: var(--color3);
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Badge personalizado */
+.badge {
+  padding: 0.5rem 1rem !important;
+  border-radius: 25px !important;
+  font-weight: 600 !important;
+  font-size: 0.75rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: var(--transition);
+}
+
+.btn-warning {
+  padding: 0.5rem 0.65rem !important;
+  border-radius: 25px !important;
+  font-weight: 600 !important;
+  font-size: 0.90rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: var(--transition);
+}
+
+.badge:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Valor em destaque */
+.table tbody td strong {
+  color: var(--color2);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+/* Botões personalizados */
+.btn {
+  border-radius: 25px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.75rem;
+  padding: 0.5rem 1.25rem;
+  transition: var(--transition);
+  border: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-warning {
+  color: white !important;
+
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: var(--transition);
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+.btn-outline-success {
+  background: linear-gradient(135deg, var(--color4), var(--color5));
+  color: white !important;
+  box-shadow: 0 4px 12px rgba(108, 186, 164, 0.3);
+  border-radius: 14px !important;
+}
+
+.btn-outline-success:hover {
+  background: linear-gradient(135deg, var(--color5), var(--color4));
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(108, 186, 164, 0.4);
+  color: white;
+}
+
+.btn-outline-danger {
+  background: linear-gradient(135deg, var(--color2), var(--pink));
+  color: white !important;
+  box-shadow: 0 4px 12px rgba(237, 76, 135, 0.3);
+  border-radius: 14px !important;
+}
+
+.btn-outline-danger:hover {
+  background: linear-gradient(135deg, var(--pink), var(--color2));
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(237, 76, 135, 0.4);
+  color: white;
+}
+
+/* Responsividade */
+.table-responsive {
+  border-radius: 12px;
+  box-shadow: inset 0 0 0 1px rgba(99, 82, 110, 0.1);
+}
+
+/* Scrollbar personalizada */
+.table-responsive::-webkit-scrollbar {
+  height: 8px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+  background: var(--color1);
+  border-radius: 4px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, var(--color4), var(--color5));
+  border-radius: 4px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, var(--color2), var(--pink));
+}
+
+/* Animações de entrada */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.table tbody tr {
+  animation: fadeInUp 0.4s ease-out backwards;
+}
+
+.table tbody tr:nth-child(1) { animation-delay: 0.1s; }
+.table tbody tr:nth-child(2) { animation-delay: 0.2s; }
+.table tbody tr:nth-child(3) { animation-delay: 0.3s; }
+.table tbody tr:nth-child(4) { animation-delay: 0.4s; }
+.table tbody tr:nth-child(5) { animation-delay: 0.5s; }
+
+/* Responsividade mobile */
+@media (max-width: 768px) {
+  h1.mb-4 {
+    font-size: 2rem;
+  }
+  
+  .card-body {
+    padding: 1rem;
+  }
+  
+  .table thead th,
+  .table tbody td {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.875rem;
+  }
+  
+  .btn {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.7rem;
+    margin: 0.25rem;
+  }
+  
+  .table tbody tr:hover {
+    transform: none;
+  }
+}
+
+@media (max-width: 576px) {
+  .btn {
+    display: block;
+    width: 100%;
+    margin: 0.25rem 0;
+  }
+  
+  .table thead th {
+    font-size: 0.75rem;
+    padding: 0.75rem 0.25rem;
+  }
+  
+  .table tbody td {
+    padding: 0.75rem 0.25rem;
+  }
+}
+
+/* Efeito de loading sutil */
+.table tbody tr:hover td {
+  position: relative;
+}
+
+/* .table tbody tr:hover td::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--primary-gradient);
+  animation: loadingBar 1s ease-in-out infinite;
+} */
+
+@keyframes loadingBar {
+  0%, 100% { transform: scaleX(0) translateX(-100%); }
+  50% { transform: scaleX(1) translateX(0); }
+}

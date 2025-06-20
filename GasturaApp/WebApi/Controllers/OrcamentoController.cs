@@ -8,7 +8,7 @@ namespace GasturaApp.WebApi.Controllers;
 
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/orcamentos")]
 public class OrcamentoController(IOrcamentoService orcamentoService) : ControllerBase
 {
     [HttpPost]
@@ -18,8 +18,8 @@ public class OrcamentoController(IOrcamentoService orcamentoService) : Controlle
         return Ok(orcamentoCriado); 
     }
 
-    [HttpGet]
-    public async Task<IActionResult> ListarOrcamentosPorUsuarioAsync([FromQuery] int usuarioId)
+    [HttpGet("{usuarioId}")]
+    public async Task<IActionResult> ListarOrcamentosPorUsuarioAsync(int usuarioId)
     {
         List<ListOrcamentoDTO> orcamentosDTO = await orcamentoService.GetAllOrcamentosByUsuarioIdAsync(usuarioId);
         return Ok(orcamentosDTO);

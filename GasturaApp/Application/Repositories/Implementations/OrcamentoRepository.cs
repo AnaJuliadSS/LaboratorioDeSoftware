@@ -16,6 +16,9 @@ public class OrcamentoRepository(AppDbContext context) : IOrcamentoRepository
 
     public async Task<List<Orcamento>> GetAllOrcamentosByUsuarioIdAsync(int usuarioId)
     {
-        return await context.Orcamentos.Where(o => o.UsuarioId == usuarioId).ToListAsync();
+        return await context.Orcamentos
+            .Include(o => o.Categoria)
+            .Where(o => o.UsuarioId == usuarioId)
+            .ToListAsync();
     }
 }

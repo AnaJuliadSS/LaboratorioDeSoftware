@@ -13,5 +13,7 @@ public class Categoria
     [Required]
     public int UsuarioId { get; set; }
 
+    public string Cor { get; set; }
+
     public Usuario Usuario { get; set; }
 }

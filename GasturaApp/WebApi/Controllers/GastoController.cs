@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace GasturaApp.WebApi.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/gastos")]
 public class GastoController(IGastoService gastoService) : ControllerBase
 {
     [HttpPost]
@@ -16,8 +16,8 @@ public class GastoController(IGastoService gastoService) : ControllerBase
         return CreatedAtAction(nameof(GetGastoByIdEUsuarioId), new { gastoId = gastoCriado.Id, usuarioId = gastoCriado.UsuarioId }, gastoCriado); //trocar pra getById dps
     }
 
-    [HttpGet]
-    public async Task<IActionResult> ListarGastosPorUsuarioAsync([FromQuery] int usuarioId)
+    [HttpGet("{usuarioId}")]
+    public async Task<IActionResult> ListarGastosPorUsuarioAsync(int usuarioId)
     {
         List<ListGastosDTO> gastos = await gastoService.GetAllGastosByUsuarioIdAsync(usuarioId);
         return Ok(gastos);
@@ -26,7 +26,24 @@ public class GastoController(IGastoService gastoService) : ControllerBase
     [HttpGet("{gastoId}/{usuarioId}")]
     public async Task<IActionResult> GetGastoByIdEUsuarioId(int gastoId, int usuarioId)
     {
-        ListGastosDTO? gasto = await gastoService.GetGastoByIdEUsuarioId(gastoId, usuarioId);
+        ListGastosDTO? gasto = await gastoService.GetGastoByIdEUsuarioIdAsync(gastoId, usuarioId);
         return Ok(gasto);
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> EditarGastoAsync(int id, [FromBody] EditGastoDTO dto)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var gastoAtualizado = await gastoService.EditarGastoByIdAsync(id, dto);
+        return Ok(gastoAtualizado);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> ExcluirGastoAsync(int id, [FromQuery] int usuarioId)
+    {
+        await gastoService.ExcluirGastoByIdAsync(id, usuarioId);
+        return NoContent();
     }
 }

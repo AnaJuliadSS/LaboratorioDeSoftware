@@ -9,4 +9,6 @@ public class CreateCategoriaDTO
 
     [Required(ErrorMessage = "O ID do usuário é obrigatório.")]
     public int UsuarioId { get; set; }
+
+    public string Cor { get; set; } = string.Empty;
 }
