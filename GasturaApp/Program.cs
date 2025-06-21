@@ -21,14 +21,20 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:5173")
+        policy.WithOrigins(
+                "http://localhost:5173", // local
+                "https://gastura-frontend.onrender.com" // domínimo backend
+                )
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
 });
 
 
-Env.Load();
+if (builder.Environment.IsDevelopment())
+{
+    DotNetEnv.Env.Load(); // carrega .env só no desenvolvimento
+}
 
 var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
 
@@ -66,7 +72,5 @@ app.UseCors("AllowFrontend");
 app.UseAuthorization();
 
 app.MapControllers();
-
-app.MapFallbackToFile("index.html");
 
 app.Run();
