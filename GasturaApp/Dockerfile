@@ -1,15 +1,14 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Copia apenas os arquivos do projeto principal e da solution
-COPY ["GasturaApp/GasturaApp.csproj", "GasturaApp/"]
+# Copia a solution e o projeto (ambos estão na mesma pasta)
 COPY ["GasturaApp.sln", "./"]
+COPY ["GasturaApp.csproj", "./"]
 
 RUN dotnet restore "GasturaApp.sln"
 
 COPY . .
 
-WORKDIR "/src/GasturaApp"
 RUN dotnet publish -c Release -o /app/out
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
