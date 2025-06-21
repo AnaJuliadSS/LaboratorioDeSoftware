@@ -4,7 +4,7 @@ interface CreateGastoDTO {
   valor: number;
   modalidadePagamento: ModalidadePagamento;
   usuarioId: number;
-  categoriaId: number;
+  categoriaId: number | null;
   descricao: string;
   dataHora?: Date | null;
 }

@@ -8,4 +8,5 @@ public interface ICategoriaRepository
     Task<List<Categoria>> GetAllCategoriasByUsuarioIdAsync(int usuarioId);
     Task<Categoria?> GetCategoriaByIdEUsarioAsync(int categoriaId, int usuarioId);
     Task<bool> CategoriaExisteParaUsuario(string descricaoCategoria, int usuarioId);
+    Task<bool> ExcluirCategoriaAsync(Categoria categoria);
 }

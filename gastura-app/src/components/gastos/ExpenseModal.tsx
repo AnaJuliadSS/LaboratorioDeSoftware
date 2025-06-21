@@ -53,7 +53,7 @@ const ExpenseModal: React.FC<{
 			descricao: formData.descricao,
 			modalidadePagamento: formData.modalidadePagamento,
 			usuarioId: 0, // será preenchido no componente pai
-			categoriaId: parseInt(formData.categoriaId),
+			categoriaId: formData.categoriaId ? parseInt(formData.categoriaId) : null,
 		};
 
 		onSave(gastoData);
@@ -99,6 +99,7 @@ const ExpenseModal: React.FC<{
 								value={formData.categoriaId}
 								onChange={(e) => setFormData({ ...formData, categoriaId: e.target.value })}
 							>
+								<option value="">Nenhuma</option>
 								{categorias.map((cat) => (
 									<option key={cat.id} value={cat.id}>
 										{cat.descricao}

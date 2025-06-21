@@ -1,4 +1,5 @@
 ﻿using GasturaApp.Application.Helpers.Mapper;
+using GasturaApp.Application.Repositories.Implementations;
 using GasturaApp.Application.Repositories.Interfaces;
 using GasturaApp.Application.Services.Interfaces;
 using GasturaApp.Core.DTOs;
@@ -50,5 +51,12 @@ public class CategoriaService(ICategoriaRepository categoriaRepository, IUsuario
         var categoria = await categoriaRepository.GetCategoriaByIdEUsarioAsync(categoriaId, usuarioId);
 
         return categoria ?? throw new EntidadeNaoEncontradaException($"Categoria");
+    }
+
+    public async Task<bool> ExcluirCategoriaByIdAsync(int categoriaId, int usuarioId)
+    {
+        var categoria = await categoriaRepository.GetCategoriaByIdEUsarioAsync(categoriaId, usuarioId);
+
+        return categoria == null ? throw new EntidadeNaoEncontradaException("Categoria") : await categoriaRepository.ExcluirCategoriaAsync(categoria);
     }
 }

@@ -10,6 +10,21 @@ namespace GasturaApp.Application.Services.Implementations;
 
 public class OrcamentoService(IOrcamentoRepository orcamentoRepository, IUsuarioRepository usuarioRepository, ICategoriaRepository categoriaRepository) : IOrcamentoService
 {
+    public async Task<Orcamento> EditarOrcamentoByIdAsync(int orcamentoId, EditOrcamentoDTO orcamentoDTO)
+    {
+        var orcamentoExistente = await orcamentoRepository.GetOrcamentoByIdEUsuarioId(orcamentoId, orcamentoDTO.UsuarioId);
+        return orcamentoExistente == null
+            ? throw new EntidadeNaoEncontradaException("Gasto")
+            : await orcamentoRepository.EditarOrcamentoByIdAsync(orcamentoExistente, orcamentoDTO);
+    }
+
+    public async Task<bool> ExcluirOrcamentoByIdAsync(int orcamentoId, int usuarioId)
+    {
+        var orcamento = await orcamentoRepository.GetOrcamentoByIdEUsuarioId(orcamentoId, usuarioId);
+
+        return orcamento == null ? throw new EntidadeNaoEncontradaException("Orçamento") : await orcamentoRepository.ExcluirOrcamentoAsync(orcamento);
+    }
+
     public async Task<List<ListOrcamentoDTO>> GetAllOrcamentosByUsuarioIdAsync(int usuarioID)
     {
         List<Orcamento> orcamentos = await orcamentoRepository.GetAllOrcamentosByUsuarioIdAsync(usuarioID);

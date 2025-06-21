@@ -116,12 +116,17 @@ public class GastoServiceTest
             Descricao = "Novo Gasto",
             UsuarioId = 1,
             CategoriaId = 2,
-            ModalidadePagamento = ModalidadePagamento.Dinheiro
+            ModalidadePagamento = ModalidadePagamento.Dinheiro,
+            Valor = 100
         };
 
         usuarioRepositoryMock.Setup(u => u.UsuarioExisteAsync(createDto.UsuarioId)).ReturnsAsync(true);
-        categoriaRepositoryMock.Setup(c => c.GetCategoriaByIdEUsarioAsync(createDto.CategoriaId, createDto.UsuarioId)).ReturnsAsync(new Categoria());
-        gastoRepositoryMock.Setup(g => g.AdicionarGastoAsync(It.IsAny<Gasto>())).ReturnsAsync((Gasto g) => g);
+        categoriaRepositoryMock
+            .Setup(c => c.GetCategoriaByIdEUsarioAsync(createDto.CategoriaId.Value, createDto.UsuarioId))
+            .ReturnsAsync(new Categoria());
+        gastoRepositoryMock
+            .Setup(g => g.AdicionarGastoAsync(It.IsAny<Gasto>()))
+            .ReturnsAsync((Gasto g) => g);
 
         var gastoCriado = await gastoService.ValidarEAdicionarGastoAsync(createDto);
 
@@ -150,6 +155,30 @@ public class GastoServiceTest
     }
 
     [Fact]
+    public async Task ValidarEAdicionarGastoAsync_Deve_Criar_Gasto_Quando_CategoriaId_For_Nula()
+    {
+        var createDto = new CreateGastoDTO
+        {
+            Descricao = "Gasto sem categoria",
+            UsuarioId = 1,
+            CategoriaId = null,
+            ModalidadePagamento = ModalidadePagamento.Pix,
+            Valor = 50
+        };
+
+        usuarioRepositoryMock.Setup(u => u.UsuarioExisteAsync(createDto.UsuarioId)).ReturnsAsync(true);
+        // Não deve chamar GetCategoriaByIdEUsarioAsync nesse caso
+        gastoRepositoryMock.Setup(g => g.AdicionarGastoAsync(It.IsAny<Gasto>()))
+                           .ReturnsAsync((Gasto g) => g);
+
+        var gastoCriado = await gastoService.ValidarEAdicionarGastoAsync(createDto);
+
+        Assert.NotNull(gastoCriado);
+        Assert.Equal(createDto.Descricao, gastoCriado.Descricao);
+        Assert.Null(gastoCriado.CategoriaId);
+    }
+
+    [Fact]
     public async Task ValidarEAdicionarGastoAsync_Deve_Lancar_EntidadeNaoEncontradaException_Quando_Categoria_Nao_Existe()
     {
         var createDto = new CreateGastoDTO
@@ -157,31 +186,34 @@ public class GastoServiceTest
             Descricao = "Gasto",
             UsuarioId = 1,
             CategoriaId = 1,
-            ModalidadePagamento = ModalidadePagamento.Credito
+            ModalidadePagamento = ModalidadePagamento.Credito,
+            Valor = 20
         };
 
         usuarioRepositoryMock.Setup(u => u.UsuarioExisteAsync(createDto.UsuarioId)).ReturnsAsync(true);
-        categoriaRepositoryMock.Setup(c => c.GetCategoriaByIdEUsarioAsync(createDto.CategoriaId, createDto.UsuarioId)).ReturnsAsync((Categoria)null!);
+        categoriaRepositoryMock
+            .Setup(c => c.GetCategoriaByIdEUsarioAsync(createDto.CategoriaId.Value, createDto.UsuarioId))
+            .ReturnsAsync((Categoria)null!);
 
         await Assert.ThrowsAsync<EntidadeNaoEncontradaException>(() =>
             gastoService.ValidarEAdicionarGastoAsync(createDto));
     }
 
     [Theory]
-    [InlineData(-1)] // valor inválido que não faz parte do enum
-    [InlineData(100)] // valor inválido que não faz parte do enum
+    [InlineData(-1)]
+    [InlineData(100)]
     public async Task ValidarEAdicionarGastoAsync_Deve_Lancar_CampoInvalidoException_Quando_ModalidadePagamento_Invalida(int modalidadeInvalida)
     {
         var createDto = new CreateGastoDTO
         {
             Descricao = "Gasto",
             UsuarioId = 1,
-            CategoriaId = 1,
-            ModalidadePagamento = (ModalidadePagamento)modalidadeInvalida
+            CategoriaId = null,
+            ModalidadePagamento = (ModalidadePagamento)modalidadeInvalida,
+            Valor = 10
         };
 
         usuarioRepositoryMock.Setup(u => u.UsuarioExisteAsync(createDto.UsuarioId)).ReturnsAsync(true);
-        categoriaRepositoryMock.Setup(c => c.GetCategoriaByIdEUsarioAsync(createDto.CategoriaId, createDto.UsuarioId)).ReturnsAsync(new Categoria());
 
         await Assert.ThrowsAsync<CampoInvalidoException>(() =>
             gastoService.ValidarEAdicionarGastoAsync(createDto));

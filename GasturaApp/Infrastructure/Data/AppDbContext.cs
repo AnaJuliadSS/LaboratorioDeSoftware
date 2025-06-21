@@ -26,7 +26,7 @@ namespace GasturaApp.Infrastructure.Data
 
             modelBuilder.Entity<Categoria>()
                 .HasOne(c => c.Usuario)
-                .WithMany() 
+                .WithMany()
                 .HasForeignKey(c => c.UsuarioId)
                 .OnDelete(DeleteBehavior.Cascade);
 
@@ -40,7 +40,7 @@ namespace GasturaApp.Infrastructure.Data
                 .HasOne(g => g.Categoria)
                 .WithMany()
                 .HasForeignKey(g => g.CategoriaId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Orcamento>()
                 .HasOne(o => o.Usuario)

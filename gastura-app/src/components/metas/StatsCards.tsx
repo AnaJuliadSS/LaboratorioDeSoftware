@@ -1,7 +1,10 @@
+import { useState } from "react";
 import Categoria from "../../types/Categoria";
 import Gasto from "../../types/Gasto";
 import Orcamento from "../../types/Orcamento";
-import { useMemo } from "react";
+import BudgetModal from "./BudgetModal";
+import CreateOrcamentoDTO from "../../types/CreateOrcamentoDTO";
+import { api } from "../../services/api";
 
 const formatCurrency = (value: number): string => {
 	return new Intl.NumberFormat("pt-BR", {
@@ -22,11 +25,61 @@ const getRandomColor = () => {
 interface StatsCardsProps {
 	gastos: Gasto[];
 	orcamentos: Orcamento[];
+	categorias: Categoria[];
+	usuarioId: number;
+	fetchOrcamentos: () => Promise<void>;
 }
 
-const StatsCards: React.FC<StatsCardsProps> = ({ gastos, orcamentos }) => {
+const StatsCards: React.FC<StatsCardsProps> = ({
+	gastos,
+	orcamentos,
+	categorias,
+	usuarioId,
+	fetchOrcamentos,
+}) => {
 	const currentMonth = new Date().getMonth();
 	const currentYear = new Date().getFullYear();
+	const [showModal, setShowModal] = useState(false);
+	const [editingOrcamento, setEditingOrcamento] = useState<Orcamento | null>(null);
+
+	const handleDeleteOrcamento = async (id: string) => {
+		if (!window.confirm("Tem certeza que deseja excluir este orcamento?")) return;
+
+		try {
+			// Exclui no backend
+			await api.delete(`/orcamentos/${id}?usuarioId=${usuarioId}`);
+
+			// Atualiza o estado local
+			fetchOrcamentos();
+		} catch (error) {
+			console.error("Erro ao excluir orcamento:", error);
+			alert("Ocorreu um erro ao tentar excluir o orçamento. Tente novamente.");
+		}
+	};
+
+	const handleSaveBudget = async (orcamentoData: CreateOrcamentoDTO) => {
+		try {
+			if (editingOrcamento) {
+				// PUT para editar (ajuste se sua API usa PATCH ou outro)
+				await api.put(`/orcamentos/${editingOrcamento.id}`, {
+					...orcamentoData,
+					usuarioId: usuarioId,
+				});
+			} else {
+				// POST para adicionar
+				await api.post("/orcamentos", {
+					...orcamentoData,
+					usuarioId: usuarioId,
+				});
+			}
+
+			// Recarregar os dados após salvar
+			await fetchOrcamentos();
+			setShowModal(false);
+		} catch (error) {
+			console.error("Erro ao salvar orcamento:", error);
+		}
+	};
 
 	// Filtrar gastos do mês atual
 	const gastosDoMes = gastos.filter((g) => {
@@ -60,38 +113,7 @@ const StatsCards: React.FC<StatsCardsProps> = ({ gastos, orcamentos }) => {
 		};
 	});
 
-	// Adicionar categorias que têm gastos mas não têm orçamento
-	const categoriasComOrcamento = new Set(orcamentosDoMes.map((o) => o.categoria.id));
-	const gastosCategoriaSemOrcamento = gastosDoMes
-		.filter((g) => !categoriasComOrcamento.has(g.categoriaId))
-		.reduce((acc, gasto) => {
-			const categoriaId = gasto.categoriaId;
-			if (!acc[categoriaId]) {
-				acc[categoriaId] = {
-					categoria: gasto.categoria,
-					gastos: [],
-				};
-			}
-			acc[categoriaId].gastos.push(gasto);
-			return acc;
-		}, {} as Record<string, { categoria: Categoria; gastos: Gasto[] }>);
-
-	const statsSemOrcamento = Object.values(gastosCategoriaSemOrcamento).map(
-		({ categoria, gastos }) => {
-			const total = gastos.reduce((sum, g) => sum + g.valor, 0);
-			return {
-				orcamento: null,
-				categoria,
-				total,
-				percentual: 0,
-				isProximoLimite: false,
-				isAcimaLimite: false,
-				isLimiteAtingido: false,
-			};
-		}
-	);
-
-	const todasStats = [...statsPorOrcamento, ...statsSemOrcamento];
+	const todasStats = [...statsPorOrcamento];
 
 	return (
 		<div className="row mb-4">
@@ -105,8 +127,26 @@ const StatsCards: React.FC<StatsCardsProps> = ({ gastos, orcamentos }) => {
 						</small>
 					</div>
 				</div>
+				<div className="col-md-2 mb-2">
+					<button
+						className="btn btn-warning w-100"
+						onClick={() => {
+							setEditingOrcamento(null);
+							setShowModal(true);
+						}}
+					>
+						Novo orçamento
+					</button>
+				</div>
 			</div>
-
+			<BudgetModal
+				show={showModal}
+				onHide={() => setShowModal(false)}
+				orcamento={editingOrcamento}
+				categorias={categorias}
+				onSave={handleSaveBudget}
+				orcamentos={orcamentos}
+			/>
 			{todasStats.length > 0 ? (
 				todasStats.map(
 					({
@@ -136,6 +176,26 @@ const StatsCards: React.FC<StatsCardsProps> = ({ gastos, orcamentos }) => {
 										>
 											{categoria?.descricao || "Categoria não definida"}
 										</h6>
+										<div className="d-flex gap-2">
+											<button
+												className="btn btn-sm btn-outline-success"
+												onClick={() => {
+													setEditingOrcamento(orcamento);
+													setShowModal(true);
+												}}
+											>
+												Editar
+											</button>
+
+											{orcamento && (
+												<button
+													className="btn btn-sm btn-outline-danger"
+													onClick={() => handleDeleteOrcamento(orcamento.id)}
+												>
+													Excluir
+												</button>
+											)}
+										</div>
 										{(isProximoLimite || isAcimaLimite) && (
 											<span
 												className={`badge ${
@@ -147,7 +207,7 @@ const StatsCards: React.FC<StatsCardsProps> = ({ gastos, orcamentos }) => {
 												}`}
 											>
 												{isAcimaLimite
-													? "Limite excedido!"  
+													? "Limite excedido!"
 													: isLimiteAtingido
 													? "Limite atingido!"
 													: "Próximo ao limite!"}

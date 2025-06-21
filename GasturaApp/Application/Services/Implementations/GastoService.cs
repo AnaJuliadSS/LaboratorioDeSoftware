@@ -61,10 +61,20 @@ public class GastoService(IGastoRepository gastoRepository,
              throw new EntidadeNaoEncontradaException("Usuário");
 
         //fazer igual de cima
-        _ = await categoriaRepository.GetCategoriaByIdEUsarioAsync(gastoDTO.CategoriaId, gastoDTO.UsuarioId) ?? throw new EntidadeNaoEncontradaException("Categoria");
+        if (gastoDTO.CategoriaId.HasValue)
+        {
+            _ = await categoriaRepository.GetCategoriaByIdEUsarioAsync(
+                    gastoDTO.CategoriaId.Value,
+                    gastoDTO.UsuarioId
+                ) ?? throw new EntidadeNaoEncontradaException("Categoria");
+        }
 
         if (!Enum.IsDefined(typeof(ModalidadePagamento), gastoDTO.ModalidadePagamento))
             throw new CampoInvalidoException("ModalidadePagamento");
+
+        if (gastoDTO.Valor <= 0)
+            throw new CampoInvalidoException("Valor deve ser maior que zero.");
+
         #endregion
 
         Gasto novoGasto = Mapper.Map<Gasto>(gastoDTO);

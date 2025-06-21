@@ -13,7 +13,7 @@ public class CategoriaController(ICategoriaService categoriaService) : Controlle
     public async Task<IActionResult> AdicionarCategoriaAsync([FromBody] CreateCategoriaDTO createCategoriaDTO)
     {
         Categoria? novaCategoria = await categoriaService.ValidarEAdicionarCategoriaAsync(createCategoriaDTO);
-        return CreatedAtAction(nameof(GetCategoriaById), new { id = novaCategoria.Id, usuarioId = novaCategoria.UsuarioId }, novaCategoria);
+        return CreatedAtAction(nameof(GetCategoriaById), new { categoriaId = novaCategoria.Id, usuarioId = novaCategoria.UsuarioId }, novaCategoria);
     }
 
     [HttpGet("{categoriaId}/{usuarioId}")]
@@ -28,5 +28,13 @@ public class CategoriaController(ICategoriaService categoriaService) : Controlle
     {
         List<Categoria> categorias = await categoriaService.GetAllCategoriasByUsuarioIdAsync(usuarioId);
         return Ok(categorias);
+    }
+
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> ExcluirCategoriaAsync(int id, [FromQuery] int usuarioId)
+    {
+        await categoriaService.ExcluirCategoriaByIdAsync(id, usuarioId);
+        return NoContent();
     }
 }

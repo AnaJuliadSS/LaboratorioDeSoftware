@@ -15,8 +15,7 @@ public class CreateGastoDTO
     [Required(ErrorMessage = "O campo usuário ID é obrigatorio.")]
     public int UsuarioId { get; set; }
 
-    [Required(ErrorMessage = "O campo categoria ID é obrigatorio.")]
-    public int CategoriaId { get; set; }
+    public int? CategoriaId { get; set; }
 
     public string Descricao { get; set; } = string.Empty;
 

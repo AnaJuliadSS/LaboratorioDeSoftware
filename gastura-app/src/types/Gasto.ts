@@ -10,7 +10,7 @@ interface Gasto {
   modalidadePagamento: ModalidadePagamento;
   usuarioId: string;
   categoriaId: string;
-  categoria: Categoria;
+  categoria: Categoria | null;
   usuario: Usuario;
 }
 

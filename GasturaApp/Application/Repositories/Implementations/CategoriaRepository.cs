@@ -20,6 +20,13 @@ public class CategoriaRepository(AppDbContext context) : ICategoriaRepository
         return categoria == null;
     }
 
+    public async Task<bool> ExcluirCategoriaAsync(Categoria categoria)
+    {
+        context.Categorias.Remove(categoria);
+        await context.SaveChangesAsync();
+        return true;
+    }
+
     public async Task<List<Categoria>> GetAllCategoriasByUsuarioIdAsync(int usuarioId)
     {
         return await context.Categorias

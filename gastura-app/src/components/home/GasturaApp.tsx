@@ -10,6 +10,7 @@ import "./GasturaApp.css";
 import { api } from "../../services/api";
 import Orcamento from "../../types/Orcamento";
 import CreateGastoDTO from "../../types/CreateGastoDTO";
+import CategoriaModal from "../categorias/CategoriaModal";
 
 // Mock Data
 const mockUsuario: Usuario = {
@@ -27,6 +28,7 @@ const GasturaApp: React.FC = () => {
 	const [filteredGastos, setFilteredGastos] = useState<Gasto[]>([]);
 	const [showModal, setShowModal] = useState(false);
 	const [editingGasto, setEditingGasto] = useState<Gasto | null>(null);
+	const [showCategoriaModal, setShowCategoriaModal] = useState(false);
 
 	const fetchGastos = async () => {
 		try {
@@ -38,25 +40,25 @@ const GasturaApp: React.FC = () => {
 		}
 	};
 
+	const fetchOrcamentos = async () => {
+		try {
+			const response = await api.get(`/orcamentos/${mockUsuario.id}`);
+			setOrcamentos(response.data);
+		} catch (error) {
+			console.error("Erro ao buscar orcamentos:", error);
+		}
+	};
+
+	const fetchCategorias = async () => {
+		try {
+			const response = await api.get(`categorias/${mockUsuario.id}`);
+			setCategorias(response.data);
+		} catch (error) {
+			console.error("Erro ao buscar categorias:", error);
+		}
+	};
+
 	useEffect(() => {
-		const fetchCategorias = async () => {
-			try {
-				const response = await api.get(`categorias/${mockUsuario.id}`);
-				setCategorias(response.data);
-			} catch (error) {
-				console.error("Erro ao buscar categorias:", error);
-			}
-		};
-
-		const fetchOrcamentos = async () => {
-			try {
-				const response = await api.get(`/orcamentos/${mockUsuario.id}`);
-				setOrcamentos(response.data);
-			} catch (error) {
-				console.error("Erro ao buscar orcamentos:", error);
-			}
-		};
-
 		fetchOrcamentos();
 		fetchCategorias();
 		fetchGastos();
@@ -73,6 +75,17 @@ const GasturaApp: React.FC = () => {
 			document.head.removeChild(link);
 		};
 	}, []);
+
+	const handleSaveCategoria = async (novaCategoria: { descricao: string; cor: string }) => {
+		try {
+			let usuarioId = categorias[0].usuarioId;
+			await api.post("/categorias", { ...novaCategoria, usuarioId });
+			fetchCategorias(); // recarrega categorias
+		} catch (error) {
+			console.error("Erro ao adicionar categoria", error);
+			alert("Erro ao adicionar categoria");
+		}
+	};
 
 	const handleFilterChange = (filters: any) => {
 		let filtered = gastos;
@@ -117,6 +130,10 @@ const GasturaApp: React.FC = () => {
 		setShowModal(true);
 	};
 
+	function onAddCategoria() {
+		setShowCategoriaModal(true);
+	}
+
 	const handleSaveExpense = async (gastoData: CreateGastoDTO) => {
 		try {
 			if (editingGasto) {
@@ -141,22 +158,22 @@ const GasturaApp: React.FC = () => {
 		}
 	};
 
-const handleDeleteExpense = async (id: string) => {
-	if (!window.confirm("Tem certeza que deseja excluir este gasto?")) return;
+	const handleDeleteExpense = async (id: string) => {
+		if (!window.confirm("Tem certeza que deseja excluir este gasto?")) return;
 
-	try {
-		// Exclui no backend
-		await api.delete(`/gastos/${id}?usuarioId=${mockUsuario.id}`);
+		try {
+			// Exclui no backend
+			await api.delete(`/gastos/${id}?usuarioId=${mockUsuario.id}`);
 
-		// Atualiza o estado local
-		const updatedGastos = gastos.filter((g) => g.id !== id);
-		setGastos(updatedGastos);
-		setFilteredGastos(updatedGastos);
-	} catch (error) {
-		console.error("Erro ao excluir gasto:", error);
-		alert("Ocorreu um erro ao tentar excluir o gasto. Tente novamente.");
-	}
-};
+			// Atualiza o estado local
+			const updatedGastos = gastos.filter((g) => g.id !== id);
+			setGastos(updatedGastos);
+			setFilteredGastos(updatedGastos);
+		} catch (error) {
+			console.error("Erro ao excluir gasto:", error);
+			alert("Ocorreu um erro ao tentar excluir o gasto. Tente novamente.");
+		}
+	};
 
 	return (
 		<div className="space-y-6">
@@ -165,12 +182,21 @@ const handleDeleteExpense = async (id: string) => {
 					<div className="col-12">
 						<h1 className="mb-4">Gastura</h1>
 
-						<StatsCards gastos={gastos} orcamentos={orcamentos} />
+						<StatsCards
+							gastos={gastos}
+							orcamentos={orcamentos}
+							categorias={categorias}
+							usuarioId={parseInt(mockUsuario.id)}
+							fetchOrcamentos={fetchOrcamentos}
+						/>
 
 						<FilterBar
 							categorias={categorias}
 							onFilterChange={handleFilterChange}
 							onAddExpense={handleAddExpense}
+							onAddCategoria={onAddCategoria}
+							fetchCategorias={fetchCategorias}
+							fetchGastos={fetchGastos}
 						/>
 
 						<ExpenseTable
@@ -185,6 +211,12 @@ const handleDeleteExpense = async (id: string) => {
 							gasto={editingGasto}
 							categorias={categorias}
 							onSave={handleSaveExpense}
+						/>
+
+						<CategoriaModal
+							show={showCategoriaModal}
+							onHide={() => setShowCategoriaModal(false)}
+							onSave={handleSaveCategoria}
 						/>
 					</div>
 				</div>

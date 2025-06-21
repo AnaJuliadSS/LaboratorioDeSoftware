@@ -21,9 +21,8 @@ public class Gasto
     [Required]
     public int UsuarioId { get; set; }
 
-    [Required]
-    public int CategoriaId { get; set; }
+    public int? CategoriaId { get; set; }
 
     public Usuario Usuario { get; set; }
-    public Categoria Categoria { get; set; }
+    public Categoria? Categoria { get; set; }
 }
