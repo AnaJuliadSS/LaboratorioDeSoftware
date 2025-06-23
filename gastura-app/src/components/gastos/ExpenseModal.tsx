@@ -42,7 +42,7 @@ const ExpenseModal: React.FC<{
 	}, [gasto, show]);
 
 	const handleSubmit = () => {
-		if (!formData.descricao || !formData.valor || !formData.categoriaId) {
+		if (!formData.descricao || !formData.valor) {
 			alert("Por favor, preencha todos os campos obrigatórios.");
 			return;
 		}
