@@ -1,0 +1,25 @@
+# Ignora a pasta do projeto de testes
+GasturaAppTest/
+
+# Ignora arquivos e pastas comuns que não são necessários no container
+*.user
+*.vs/
+*.vscode/
+*.suo
+*.dll
+*.exe
+*.pdb
+*.db
+*.mdf
+*.log
+*.env
+node_modules/
+bin/
+obj/
+Dockerfile
+docker-compose.yml
+.dockerignore
+.git
+.gitignore
+README.md
+.env*
