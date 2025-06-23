@@ -9,7 +9,8 @@ const FilterBar: React.FC<{
 	onAddCategoria: () => void;
 	fetchCategorias: () => Promise<void>;
 	fetchGastos: () => Promise<void>;
-}> = ({ categorias, onFilterChange, onAddExpense, onAddCategoria, fetchCategorias, fetchGastos }) => {
+	fetchOrcamentos: () =>  Promise<void>;
+}> = ({ categorias, onFilterChange, onAddExpense, onAddCategoria, fetchCategorias, fetchGastos, fetchOrcamentos }) => {
 	const [filters, setFilters] = useState({
 		categoria: "",
 		modalidadePagamento: "",
@@ -32,8 +33,9 @@ const FilterBar: React.FC<{
 
 		try {
 			await api.delete(`/categorias/${id}?usuarioId=${usuarioId}`);
-			await fetchCategorias();
-			await fetchGastos();
+			fetchCategorias();
+			fetchGastos();
+			fetchOrcamentos();
 		} catch (error) {
 			console.error("Erro ao excluir categoria:", error);
 			alert("Erro ao excluir categoria. Tente novamente.");

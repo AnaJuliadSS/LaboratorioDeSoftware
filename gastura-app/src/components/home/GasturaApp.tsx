@@ -197,6 +197,7 @@ const GasturaApp: React.FC = () => {
 							onAddCategoria={onAddCategoria}
 							fetchCategorias={fetchCategorias}
 							fetchGastos={fetchGastos}
+							fetchOrcamentos={fetchOrcamentos}
 						/>
 
 						<ExpenseTable

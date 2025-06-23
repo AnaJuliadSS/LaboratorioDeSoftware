@@ -145,6 +145,7 @@ const ExpenseTable: React.FC<{
 									</td>
 									<td>{getModalidadePagamentoText(gasto.modalidadePagamento)}</td>
 									<td>{gasto.dataHora ? formatDateTime(gasto.dataHora) : "-"}</td>
+									
 									<td>
 										<button
 											className="btn btn-sm btn-outline-success me-2"
