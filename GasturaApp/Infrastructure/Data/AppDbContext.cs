@@ -53,6 +53,17 @@ namespace GasturaApp.Infrastructure.Data
                 .WithMany()
                 .HasForeignKey(o => o.CategoriaId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Usuario>().HasData(
+                new Usuario
+                {
+                    Id = 2, // chave primária fixa
+                    Nome = "Aninha",
+                    Email = "user@example.com",
+                    DataCadastro = new DateTime(2025, 5, 12, 22, 52, 1, 634),
+                    Senha = "12345665"
+                }
+            );
         }
     }
 }
