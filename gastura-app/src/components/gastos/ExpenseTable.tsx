@@ -10,8 +10,17 @@ const formatCurrency = (value: number): string => {
 	}).format(value);
 };
 
-const formatDateTime = (date: Date): string => {
-	return date.toLocaleString("pt-BR");
+const formatDateTime = (date: string | Date): string => {
+  const parsedDate = typeof date === "string" ? new Date(date) : date;
+
+  if (isNaN(parsedDate.getTime())) {
+    return "-"; // data inválida
+  }
+
+  return parsedDate.toLocaleString("pt-BR", {
+    dateStyle: "short",
+    timeStyle: "short"
+  });
 };
 
 const getRandomColor = () => {
