@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace GasturaApp.WebApi.Controllers;
 
 [ApiController]
-[Route("api/categorias")]
+[Route("categorias")]
 public class CategoriaController(ICategoriaService categoriaService) : ControllerBase
 {
 

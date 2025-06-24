@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace GasturaApp.WebApi.Controllers;
 
 [ApiController]
-[Route("api/gastos")]
+[Route("gastos")]
 public class GastoController(IGastoService gastoService) : ControllerBase
 {
     [HttpPost]

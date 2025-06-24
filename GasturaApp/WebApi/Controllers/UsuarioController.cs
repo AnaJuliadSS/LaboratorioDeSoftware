@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace GasturaApp.WebApi.Controllers;
 
 [ApiController]
-[Route("api/usuarios")]
+[Route("usuarios")]
 public class UsuarioController(IUsuarioService usuarioService) : ControllerBase
 {
     [HttpPost]

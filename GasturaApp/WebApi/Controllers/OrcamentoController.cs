@@ -8,7 +8,7 @@ namespace GasturaApp.WebApi.Controllers;
 
 
 [ApiController]
-[Route("api/orcamentos")]
+[Route("orcamentos")]
 public class OrcamentoController(IOrcamentoService orcamentoService) : ControllerBase
 {
     [HttpPost]
