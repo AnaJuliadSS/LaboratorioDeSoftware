@@ -64,6 +64,30 @@ namespace GasturaApp.Infrastructure.Data
                     Senha = "12345665"
                 }
             );
+
+            modelBuilder.Entity<Categoria>().HasData(
+            new Categoria
+            {
+                Id = 1,
+                Descricao = "Alimentação",
+                Cor = "#FF5733",
+                UsuarioId = 2
+            },
+            new Categoria
+            {
+                Id = 2,
+                Descricao = "Transporte",
+                Cor = "#33C1FF",
+                UsuarioId = 2
+            },
+            new Categoria
+            {
+                Id = 3,
+                Descricao = "Educação",
+                Cor = "#8D33FF",
+                UsuarioId = 2
+            }
+        );
         }
     }
 }
