@@ -171,7 +171,7 @@ const GasturaApp: React.FC = () => {
 			setFilteredGastos(updatedGastos);
 		} catch (error) {
 			console.error("Erro ao excluir gasto:", error);
-			alert("Ocorreu um erro ao tentar excluir o gasto. Tente novamente.");
+			alert("Ocorreu um erro ao tentar excluir o g	asto. Tente novamente.");
 		}
 	};
 
