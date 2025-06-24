@@ -6,6 +6,8 @@
    baseURL: apiUrl
  });
 
+ (window as any).api = api;
+
 
 // import axios from 'axios';
 
