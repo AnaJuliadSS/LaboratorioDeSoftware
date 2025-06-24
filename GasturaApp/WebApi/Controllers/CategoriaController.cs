@@ -9,6 +9,13 @@ namespace GasturaApp.WebApi.Controllers;
 [Route("api/categorias")]
 public class CategoriaController(ICategoriaService categoriaService) : ControllerBase
 {
+
+    [HttpGet("ping")]
+    public IActionResult Ping()
+    {
+        return Ok("API online");
+    }
+
     [HttpPost]
     public async Task<IActionResult> AdicionarCategoriaAsync([FromBody] CreateCategoriaDTO createCategoriaDTO)
     {
