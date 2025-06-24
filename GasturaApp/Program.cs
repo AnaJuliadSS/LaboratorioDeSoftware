@@ -35,14 +35,25 @@ if (builder.Environment.IsDevelopment())
 {
     DotNetEnv.Env.Load(); // carrega .env só no desenvolvimento
 }
+string ConvertDatabaseUrlToConnectionString(string databaseUrl)
+{
+    // Ex: postgresql://usuario:senha@host:porta/banco
+    var uri = new Uri(databaseUrl);
+    var userInfo = uri.UserInfo.Split(':');
 
-var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
+    return $"Host={uri.Host};Port={uri.Port};Username={userInfo[0]};Password={userInfo[1]};Database={uri.AbsolutePath.TrimStart('/')};Ssl Mode=Require;Trust Server Certificate=true;";
+}
 
-if (string.IsNullOrEmpty(connectionString))
-    throw new InvalidOperationException("DATABASE_URL não está definido no .env ou nas variáveis de ambiente.");
+var rawUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+
+if (string.IsNullOrEmpty(rawUrl))
+    throw new InvalidOperationException("DATABASE_URL não está definido.");
+
+var connectionString = ConvertDatabaseUrlToConnectionString(rawUrl);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
+
 
 builder.Services.AddScoped<ICategoriaService, CategoriaService>();
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
