@@ -16,7 +16,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -28,18 +27,20 @@ builder.Services.AddCors(options =>
     });
 });
 
-
 if (builder.Environment.IsDevelopment())
 {
     DotNetEnv.Env.Load(); // carrega .env só no desenvolvimento
 }
+
 string ConvertDatabaseUrlToConnectionString(string databaseUrl)
 {
-    // Ex: postgresql://usuario:senha@host:porta/banco
     var uri = new Uri(databaseUrl);
     var userInfo = uri.UserInfo.Split(':');
 
-    return $"Host={uri.Host};Port={uri.Port};Username={userInfo[0]};Password={userInfo[1]};Database={uri.AbsolutePath.TrimStart('/')};Ssl Mode=Require;Trust Server Certificate=true;";
+    // Usa porta padrão 5432 se não houver porta na URL (uri.Port == -1)
+    var port = uri.Port == -1 ? 5432 : uri.Port;
+
+    return $"Host={uri.Host};Port={port};Username={userInfo[0]};Password={userInfo[1]};Database={uri.AbsolutePath.TrimStart('/')};Ssl Mode=Require;Trust Server Certificate=true;";
 }
 
 var rawUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
@@ -49,9 +50,11 @@ if (string.IsNullOrEmpty(rawUrl))
 
 var connectionString = ConvertDatabaseUrlToConnectionString(rawUrl);
 
+// Opcional: só para debug (remova em produção)
+// Console.WriteLine($"Connection String: {connectionString}");
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
-
 
 builder.Services.AddScoped<ICategoriaService, CategoriaService>();
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
